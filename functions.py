@@ -43,9 +43,61 @@ def convert_from_csv_to_json(csv_file_name: str, json_file_name: str) -> Optiona
         file.write(json_data)
 
 
-def create_categories():
-    pass
+"""
+Для использования функций create_categories, create_advertisements выполнить в терминале:
+1. python manage.py shell
+2. from functions import create_categories, create_advertisements
+3. create_categories("data/categories.json")
+4. create_advertisements("data/ads.json")
+"""
+
+"""
+Для очистки таблиц выполнить в терминале: python manage.py flush
+"""
 
 
-def create_advertisement():
-    pass
+def create_categories(json_file_name) -> Optional[str]:
+    """
+    Заполняет таблицу Category данными из файла формата JSON
+    :param json_file_name: Имя файла формата JSON
+    :return: Опционально сообщение об ошибке
+    """
+    try:
+        file = open(json_file_name, encoding="utf-8")
+    except FileNotFoundError:
+        return f"Файл {json_file_name} не найден"
+    else:
+        json_file_data = json.load(file)
+        for value in json_file_data.values():
+            category = Category(
+                name=value["name"]
+            )
+            category.save()
+    finally:
+        file.close()
+
+
+def create_advertisements(json_file_name) -> Optional[str]:
+    """
+    Заполняет таблицу Advertisement данными из файла формата JSON
+    :param json_file_name: Имя файла формата JSON
+    :return: Опционально сообщение об ошибке
+    """
+    try:
+        file = open(json_file_name, encoding="utf-8")
+    except FileNotFoundError:
+        return f"Файл {json_file_name} не найден"
+    else:
+        json_file_data = json.load(file)
+        for value in json_file_data.values():
+            advertisement = Advertisement(
+                name=value["name"],
+                author=value["author"],
+                price=value["price"],
+                description=value["description"],
+                address=value["address"],
+                is_published=value["is_published"].capitalize()
+            )
+            advertisement.save()
+    finally:
+        file.close()
