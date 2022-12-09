@@ -3,6 +3,7 @@ import json
 from typing import Dict, Union, Optional
 from ads.models import Category, Advertisement
 
+
 """
 Для использования функции convert_from_csv_to_json выполнить в терминале:
 1. python manage.py shell
