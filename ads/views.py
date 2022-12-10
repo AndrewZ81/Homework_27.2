@@ -1,7 +1,8 @@
+import collections
 import json
 from typing import List, Dict
 
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 
 # from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -12,18 +13,17 @@ from django.views.generic import DetailView
 from ads.models import Category, Advertisement
 
 
-def show_main_page(request) -> HttpResponse:
+def show_main_page(request) -> JsonResponse:
     return JsonResponse({"status": "ok"}, status=200)
 
 
 @method_decorator(csrf_exempt, name="dispatch")
 class CategoryView(View):
     """
-    Отображает таблицу Category, делает выборку записи из Category по id
-    или создаёт новую запись Category
+    Отображает таблицу Category или создаёт новую запись Category
     """
     def get(self, request) -> JsonResponse:
-        categories = Category.objects.all()
+        categories: collections.Iterable = Category.objects.all()
         response_as_list: List[Dict[str, int | str]] = []
         for category in categories:
             response_as_list.append(
@@ -36,7 +36,7 @@ class CategoryView(View):
                             json_dumps_params={"ensure_ascii": False, "indent": 4})
 
     def post(self, request) -> JsonResponse:
-        category_data = json.loads(request.body)
+        category_data: Dict[str, int | str] = json.loads(request.body)
         category: Category = Category(**category_data)
         category.save()
         response_as_dict: Dict[str, int | str] = {
@@ -53,9 +53,8 @@ class CategoryDetailView(DetailView):
     model = Category
 
     def get(self, request, *args, **kwargs) -> JsonResponse:
-        category = self.get_object()
-
-        response = {
+        category: Category = self.get_object()
+        response: Dict[str, int | str] = {
             "id": category.id,
             "name": category.name
         }
