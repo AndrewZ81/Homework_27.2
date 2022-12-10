@@ -5,7 +5,7 @@ from ads.models import Category, Advertisement
 
 
 def show_main_page(request) -> HttpResponse:
-    return HttpResponse('{"status": "ok"}')
+    return JsonResponse({"status": "ok"})
 
 
 def show_categories(request) -> JsonResponse:
