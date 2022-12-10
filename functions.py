@@ -42,6 +42,8 @@ def convert_from_csv_to_json(csv_file_name: str, json_file_name: str) -> Optiona
         json_data: str = json.dumps(raw_data, indent=4, ensure_ascii=False)
         file.write(json_data)
 
+    return None
+
 
 """
 Для использования функций create_categories, create_advertisements выполнить в терминале:
@@ -75,6 +77,7 @@ def create_categories(json_file_name) -> Optional[str]:
             category.save()
     finally:
         file.close()
+        return None
 
 
 def create_advertisements(json_file_name) -> Optional[str]:
@@ -101,3 +104,4 @@ def create_advertisements(json_file_name) -> Optional[str]:
             advertisement.save()
     finally:
         file.close()
+        return None
