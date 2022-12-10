@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "My personal \"AVITO\""
 authors = ["Andrew Zaiko <andrewzaiko@gmail.com>"]
 readme = "README.md"
-packages = [{include = "homework_27"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
