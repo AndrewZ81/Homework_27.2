@@ -1,6 +1,6 @@
 import csv
 import json
-from typing import Dict, Union, Optional
+from typing import Dict, Union, Optional, IO, Any
 from ads.models import Category, Advertisement
 
 
@@ -23,18 +23,18 @@ def convert_from_csv_to_json(csv_file_name: str, json_file_name: str) -> Optiona
     raw_data: Dict[int, Dict[str, Union[int, str]]] = {}
 
     try:
-        file = open(csv_file_name, encoding="utf-8")
+        file: IO = open(csv_file_name, encoding="utf-8")
     except FileNotFoundError:
         return f"Файл {csv_file_name} не найден"
     else:
         csv_file_data = csv.DictReader(file)
         for row in csv_file_data:
             try:
-                key: int = row["id"]
+                key = row["id"]
             except KeyError:
                 return "Ключ id не найден"
             else:
-                raw_data[key]: Dict[str, Union[int, str]] = row
+                raw_data[key] = row
     finally:
         file.close()
 
@@ -65,13 +65,13 @@ def create_categories(json_file_name) -> Optional[str]:
     :return: Опционально сообщение об ошибке
     """
     try:
-        file = open(json_file_name, encoding="utf-8")
+        file: IO = open(json_file_name, encoding="utf-8")
     except FileNotFoundError:
         return f"Файл {json_file_name} не найден"
     else:
-        json_file_data = json.load(file)
+        json_file_data: dict = json.load(file)
         for value in json_file_data.values():
-            category = Category(
+            category: Category = Category(
                 name=value["name"]
             )
             category.save()
